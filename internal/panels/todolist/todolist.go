@@ -2,8 +2,8 @@
 package todolist
 
 import (
-	tea "github.com/charmbracelet/bubbletea/v2"
-	"github.com/charmbracelet/lipgloss/v2"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 )
 
 var (
@@ -80,7 +80,7 @@ func (m *Model) SetSize(width, height int) {
 // Update handles messages for the todo list panel.
 func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		if m.inputMode {
 			switch msg.String() {
 			case "enter":
@@ -111,7 +111,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 				if m.cursor < len(m.items)-1 {
 					m.cursor++
 				}
-			case "enter", " ":
+			case "enter", "space":
 				if len(m.items) > 0 {
 					m.items[m.cursor].completed = !m.items[m.cursor].completed
 				}

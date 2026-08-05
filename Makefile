@@ -1,4 +1,4 @@
-.PHONY: all build run test lint clean e2e help install-tools
+.PHONY: all build run test lint clean e2e e2e-go e2e-shell e2e-install help install-tools
 
 BINARY_NAME=tui-e2e-demo
 BINARY_DIR=bin
@@ -29,9 +29,19 @@ lint:
 		go vet ./...; \
 	fi
 
-e2e: build
-	@echo "Running E2E tests..."
+e2e: e2e-go e2e-shell
+
+e2e-go: build
+	@echo "Running Go E2E tests (teatest)..."
 	go test -v -tags=e2e ./tests/e2e/...
+
+e2e-shell: build
+	@echo "Running Shell-Use E2E tests..."
+	cd tests/e2e-shell-use && npm test
+
+e2e-install:
+	@echo "Installing Shell-Use E2E test dependencies..."
+	cd tests/e2e-shell-use && npm install
 
 clean:
 	@echo "Cleaning..."
@@ -65,7 +75,10 @@ help:
 	@echo "  run           - Build and run the application"
 	@echo "  test          - Run unit tests"
 	@echo "  lint          - Run linter"
-	@echo "  e2e           - Run end-to-end tests"
+	@echo "  e2e           - Run all end-to-end tests (Go + Shell-Use)"
+	@echo "  e2e-go        - Run Go-level E2E tests (teatest)"
+	@echo "  e2e-shell     - Run Shell-Use E2E tests (Node.js)"
+	@echo "  e2e-install   - Install Shell-Use test dependencies"
 	@echo "  clean         - Remove build artifacts"
 	@echo "  install-tools - Install development tools"
 	@echo "  deps          - Download and tidy dependencies"

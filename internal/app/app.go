@@ -2,8 +2,8 @@
 package app
 
 import (
-	tea "github.com/charmbracelet/bubbletea/v2"
-	"github.com/charmbracelet/lipgloss/v2"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 
 	"github.com/yourusername/tui-e2e-demo/internal/components/footer"
 	"github.com/yourusername/tui-e2e-demo/internal/components/header"
@@ -47,11 +47,8 @@ func New() Model {
 
 // Init initializes the application.
 // In BubbleTea v2, Init returns (tea.Model, tea.Cmd)
-func (m Model) Init() (tea.Model, tea.Cmd) {
-	return m, tea.Batch(
-		tea.EnterAltScreen,
-		tea.EnableMouseCellMotion,
-	)
+func (m Model) Init() tea.Cmd {
+	return nil
 }
 
 // Update handles messages and updates the model.
@@ -59,7 +56,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		switch msg.String() {
 		case "ctrl+c", "q":
 			return m, tea.Quit
@@ -122,9 +119,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 // View renders the application.
-func (m Model) View() string {
+func (m Model) View() tea.View {
 	if !m.initialized {
-		return "Initializing..."
+		return tea.NewView("Initializing...")
 	}
 
 	var content string
@@ -139,13 +136,18 @@ func (m Model) View() string {
 		content = m.timerPanel.View()
 	}
 
-	return lipgloss.JoinVertical(
+	str := lipgloss.JoinVertical(
 		lipgloss.Left,
 		m.header.View(),
 		m.tabs.View(),
 		content,
 		m.footer.View(),
 	)
+
+	v := tea.NewView(str)
+	v.AltScreen = true
+	v.MouseMode = tea.MouseModeCellMotion
+	return v
 }
 
 // Run starts the application.

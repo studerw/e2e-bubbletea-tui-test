@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	tea "github.com/charmbracelet/bubbletea/v2"
-	"github.com/charmbracelet/lipgloss/v2"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 )
 
 var (
@@ -85,7 +85,7 @@ func tick() tea.Cmd {
 // Update handles messages for the timer panel.
 func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		switch msg.String() {
 		case "left", "h":
 			if m.selected > 0 {
@@ -95,7 +95,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			if m.selected < 2 {
 				m.selected++
 			}
-		case "enter", " ":
+		case "enter", "space":
 			switch m.selected {
 			case 0:
 				m.running = !m.running
