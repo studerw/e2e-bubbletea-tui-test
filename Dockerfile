@@ -47,11 +47,10 @@ COPY --from=go-builder /go/bin/golangci-lint /usr/local/bin/golangci-lint
 COPY --from=go-builder /go/pkg/mod /go/pkg/mod
 
 # ── Node runtime ──────────────────────────────────────────────────────────────
-COPY --from=node-builder /usr/local/bin/node  /usr/local/bin/node
-COPY --from=node-builder /usr/local/bin/npm   /usr/local/bin/npm
-COPY --from=node-builder /usr/local/bin/npx   /usr/local/bin/npx
+COPY --from=node-builder /usr/local/bin /usr/local/bin
 COPY --from=node-builder /usr/local/lib/node_modules /usr/local/lib/node_modules
-# Pre-installed project node_modules (baked in so CI needs no network)
+
+# Pre-installed project node_modules
 COPY --from=node-builder /build/tests/e2e-shell-use/node_modules \
                          /workspace/tests/e2e-shell-use/node_modules
 

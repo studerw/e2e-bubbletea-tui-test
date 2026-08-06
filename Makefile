@@ -1,9 +1,13 @@
 .PHONY: all build run test lint clean e2e e2e-go e2e-shell e2e-install help install-tools \
-         build-docker-image docker-build docker-run docker-test docker-lint docker-e2e docker-e2e-go docker-e2e-shell docker-shell
+	     deps fmt coverage \
+	     build-docker-image docker-build docker-run docker-test docker-lint docker-e2e docker-e2e-go docker-e2e-shell docker-shell
 
 BINARY_NAME=tui-e2e-demo
 BINARY_DIR=bin
 CMD_DIR=cmd/app
+
+# Ensure PWD is set reliably across environments (e.g., in CI or sub-makes)
+PWD ?= $(shell pwd)
 
 # ─── Docker settings ───────────────────────────────────────────────────────────
 # Override DOCKER_IMAGE to push/pull from a registry, e.g.:
@@ -13,9 +17,10 @@ DOCKER_IMAGE ?= tui-e2e-demo:dev
 # Common flags for all non-interactive docker run invocations:
 #   --rm            remove the container when it exits
 #   -v $(PWD):/workspace  bind-mount the project source into /workspace
+#   -v /workspace/tests/e2e-shell-use/node_modules shield container node_modules from host overwrite
 #   -w /workspace   set the working directory inside the container
 # No -t or -i flags here → fully compatible with CI pipelines (no TTY needed).
-DOCKER_RUN_ARGS = --rm -v $(PWD):/workspace -w /workspace
+DOCKER_RUN_ARGS = --rm -v $(PWD):/workspace -v /workspace/tests/e2e-shell-use/node_modules -w /workspace
 
 all: lint test build
 
@@ -36,10 +41,10 @@ test:
 lint:
 	@echo "Running linter..."
 	@if command -v golangci-lint >/dev/null 2>&1; then \
-		golangci-lint run ./...; \
+	   golangci-lint run ./...; \
 	else \
-		echo "golangci-lint not installed. Run 'make install-tools' to install."; \
-		go vet ./...; \
+	   echo "golangci-lint not installed. Run 'make install-tools' to install."; \
+	   go vet ./...; \
 	fi
 
 e2e: e2e-go e2e-shell
@@ -129,7 +134,7 @@ docker-build:
 	@echo "Building $(BINARY_NAME) inside Docker..."
 	@mkdir -p $(BINARY_DIR)
 	docker run $(DOCKER_RUN_ARGS) $(DOCKER_IMAGE) \
-		go build -o $(BINARY_DIR)/$(BINARY_NAME) ./$(CMD_DIR)
+	   go build -o $(BINARY_DIR)/$(BINARY_NAME) ./$(CMD_DIR)
 	@echo "Build complete: $(BINARY_DIR)/$(BINARY_NAME)"
 
 # Run the compiled TUI app interactively.
@@ -137,8 +142,8 @@ docker-build:
 # only — not for CI pipelines (use docker-e2e-go / docker-e2e-shell there).
 docker-run: docker-build
 	@echo "Running TUI inside Docker (interactive — requires a TTY)..."
-	docker run --rm -it -v $(PWD):/workspace -w /workspace $(DOCKER_IMAGE) \
-		./$(BINARY_DIR)/$(BINARY_NAME)
+	docker run --rm -it -v $(PWD):/workspace -v /workspace/tests/e2e-shell-use/node_modules -w /workspace $(DOCKER_IMAGE) \
+	   ./$(BINARY_DIR)/$(BINARY_NAME)
 
 # Run Go unit tests. Fully headless; no TTY required.
 docker-test:
@@ -165,7 +170,7 @@ docker-e2e-go: docker-build
 docker-e2e-shell: docker-build
 	@echo "Running Shell-Use E2E tests inside Docker..."
 	docker run -e TEST_MODE=true $(DOCKER_RUN_ARGS) $(DOCKER_IMAGE) \
-		sh -c 'cd tests/e2e-shell-use && npm test'
+	   sh -c 'cd tests/e2e-shell-use && npm test'
 
 # Run the full E2E suite (Go + Shell-Use) inside Docker. CI-compatible.
 docker-e2e: docker-e2e-go docker-e2e-shell
@@ -173,4 +178,4 @@ docker-e2e: docker-e2e-go docker-e2e-shell
 # Drop into an interactive bash shell inside the container for debugging.
 docker-shell:
 	@echo "Opening bash shell inside Docker container..."
-	docker run --rm -it -v $(PWD):/workspace -w /workspace $(DOCKER_IMAGE) bash
+	docker run --rm -it -v $(PWD):/workspace -v /workspace/tests/e2e-shell-use/node_modules -w /workspace $(DOCKER_IMAGE) bash
