@@ -143,7 +143,7 @@ docker-run: docker-build
 # Run Go unit tests. Fully headless; no TTY required.
 docker-test:
 	@echo "Running unit tests inside Docker..."
-	docker run $(DOCKER_RUN_ARGS) $(DOCKER_IMAGE) go test -v -race ./...
+	docker run -e CGO_ENABLED=1 $(DOCKER_RUN_ARGS) $(DOCKER_IMAGE) go test -v -race ./...
 
 # Run golangci-lint. Fully headless; no TTY required.
 docker-lint:
