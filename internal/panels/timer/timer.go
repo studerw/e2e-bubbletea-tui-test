@@ -52,21 +52,24 @@ type tickMsg time.Time
 
 // Model represents the timer panel state.
 type Model struct {
-	elapsed  time.Duration
-	running  bool
-	laps     []time.Duration
-	selected int
-	width    int
-	height   int
+	elapsed           time.Duration
+	previouslyElapsed time.Duration
+	startTime         time.Time
+	running           bool
+	laps              []time.Duration
+	selected          int
+	width             int
+	height            int
 }
 
 // New creates a new timer panel model.
 func New() Model {
 	return Model{
-		elapsed:  0,
-		running:  false,
-		laps:     make([]time.Duration, 0),
-		selected: 0,
+		elapsed:           0,
+		previouslyElapsed: 0,
+		running:           false,
+		laps:              make([]time.Duration, 0),
+		selected:          0,
 	}
 }
 
@@ -100,7 +103,10 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			case 0:
 				m.running = !m.running
 				if m.running {
+					m.startTime = time.Now()
 					return m, tick()
+				} else {
+					m.previouslyElapsed = m.elapsed
 				}
 			case 1:
 				if m.running {
@@ -108,23 +114,28 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 				}
 			case 2:
 				m.elapsed = 0
+				m.previouslyElapsed = 0
 				m.laps = make([]time.Duration, 0)
 				m.running = false
 			}
 		case "s":
 			m.running = !m.running
 			if m.running {
+				m.startTime = time.Now()
 				return m, tick()
+			} else {
+				m.previouslyElapsed = m.elapsed
 			}
 		case "r":
 			m.elapsed = 0
+			m.previouslyElapsed = 0
 			m.laps = make([]time.Duration, 0)
 			m.running = false
 		}
 
 	case tickMsg:
 		if m.running {
-			m.elapsed += time.Millisecond * 100
+			m.elapsed = m.previouslyElapsed + time.Since(m.startTime)
 			return m, tick()
 		}
 	}

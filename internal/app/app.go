@@ -100,19 +100,31 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	var cmd tea.Cmd
-	switch m.activeTab {
-	case 0:
+	switch msg := msg.(type) {
+	case tea.KeyPressMsg:
+		switch m.activeTab {
+		case 0:
+			m.textPanel, cmd = m.textPanel.Update(msg)
+			cmds = append(cmds, cmd)
+		case 1:
+			m.webPanel, cmd = m.webPanel.Update(msg)
+			cmds = append(cmds, cmd)
+		case 2:
+			m.todoPanel, cmd = m.todoPanel.Update(msg)
+			cmds = append(cmds, cmd)
+		case 3:
+			m.timerPanel, cmd = m.timerPanel.Update(msg)
+			cmds = append(cmds, cmd)
+		}
+	default:
 		m.textPanel, cmd = m.textPanel.Update(msg)
 		cmds = append(cmds, cmd)
-	case 1:
-		m.webPanel, cmd = m.webPanel.Update(msg)
-		cmds = append(cmds, cmd)
-	case 2:
-		m.todoPanel, cmd = m.todoPanel.Update(msg)
-		cmds = append(cmds, cmd)
-	case 3:
-		m.timerPanel, cmd = m.timerPanel.Update(msg)
-		cmds = append(cmds, cmd)
+
+		var wCmd, tCmd, tmCmd tea.Cmd
+		m.webPanel, wCmd = m.webPanel.Update(msg)
+		m.todoPanel, tCmd = m.todoPanel.Update(msg)
+		m.timerPanel, tmCmd = m.timerPanel.Update(msg)
+		cmds = append(cmds, wCmd, tCmd, tmCmd)
 	}
 
 	return m, tea.Batch(cmds...)

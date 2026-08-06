@@ -46,11 +46,11 @@ e2e: e2e-go e2e-shell
 
 e2e-go: build
 	@echo "Running Go E2E tests (teatest)..."
-	go test -v -tags=e2e ./tests/e2e/...
+	TEST_MODE=true go test -v -tags=e2e ./tests/e2e/...
 
 e2e-shell: build
 	@echo "Running Shell-Use E2E tests..."
-	cd tests/e2e-shell-use && npm test
+	cd tests/e2e-shell-use && TEST_MODE=true npm test
 
 e2e-install:
 	@echo "Installing Shell-Use E2E test dependencies..."
@@ -155,7 +155,7 @@ docker-lint:
 # it does NOT require a host TTY and is fully CI-compatible.
 docker-e2e-go: docker-build
 	@echo "Running Go E2E tests (teatest) inside Docker..."
-	docker run $(DOCKER_RUN_ARGS) $(DOCKER_IMAGE) go test -v -tags=e2e ./tests/e2e/...
+	docker run -e TEST_MODE=true $(DOCKER_RUN_ARGS) $(DOCKER_IMAGE) go test -v -tags=e2e ./tests/e2e/...
 
 # Run Shell-Use (Node/Vitest) E2E tests.
 # shell-use spawns its own pseudo-terminal internally (/dev/pts is available
@@ -164,7 +164,7 @@ docker-e2e-go: docker-build
 # step is required here.
 docker-e2e-shell: docker-build
 	@echo "Running Shell-Use E2E tests inside Docker..."
-	docker run $(DOCKER_RUN_ARGS) $(DOCKER_IMAGE) \
+	docker run -e TEST_MODE=true $(DOCKER_RUN_ARGS) $(DOCKER_IMAGE) \
 		sh -c 'cd tests/e2e-shell-use && npm test'
 
 # Run the full E2E suite (Go + Shell-Use) inside Docker. CI-compatible.

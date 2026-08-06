@@ -7,6 +7,7 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -105,7 +106,11 @@ func (m *Model) SetSize(width, height int) {
 }
 
 // getRandomDelay returns a random duration between 3-7 seconds.
+// If TEST_MODE is true, it returns 10ms to speed up tests.
 func getRandomDelay() time.Duration {
+	if os.Getenv("TEST_MODE") == "true" {
+		return 10 * time.Millisecond
+	}
 	delay := 3000 + rand.Intn(4001)
 	return time.Duration(delay) * time.Millisecond
 }

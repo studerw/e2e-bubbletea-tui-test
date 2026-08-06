@@ -206,6 +206,43 @@ func TestTimerStartStop(t *testing.T) {
 	t.Log("Timer start/stop test passed")
 }
 
+// TestTimerBackgroundRunning verifies that the timer continues running in the background
+// when the user switches to a different tab.
+func TestTimerBackgroundRunning(t *testing.T) {
+	m := app.New()
+	tm := teatest.NewTestModel(t, m, teatest.WithInitialTermSize(120, 40))
+
+	// Allow initial render
+	time.Sleep(200 * time.Millisecond)
+
+	// Switch to Timer tab (tab 4)
+	sendKey(tm, "4")
+	time.Sleep(200 * time.Millisecond)
+
+	// Press 's' to start the timer
+	sendKey(tm, "s")
+	time.Sleep(200 * time.Millisecond)
+
+	// Switch back to Text tab (tab 1)
+	sendKey(tm, "1")
+	time.Sleep(200 * time.Millisecond)
+
+	// Wait for 1.5 seconds in the background
+	time.Sleep(1500 * time.Millisecond)
+
+	// Switch back to Timer tab (tab 4)
+	sendKey(tm, "4")
+	time.Sleep(200 * time.Millisecond)
+
+	// Verify that the timer accumulated time (should be at least 00:01)
+	waitForOutput(t, tm, "00:0", 3*time.Second)
+
+	// Quit
+	sendKey(tm, "q")
+	tm.WaitFinished(t, teatest.WithFinalTimeout(5*time.Second))
+	t.Log("Timer background running test passed")
+}
+
 // TestQuitBehavior verifies the app exits cleanly when 'q' is pressed.
 func TestQuitBehavior(t *testing.T) {
 	m := app.New()

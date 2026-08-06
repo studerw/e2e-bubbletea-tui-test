@@ -1,6 +1,17 @@
 # TUI E2E Demo
 
-A TUI application built with Go and BubbleTea v2 for end-to-end testing purposes.
+This project is a dedicated sandbox designed to explore and evaluate different End-to-End (E2E) testing frameworks for Terminal User Interfaces (TUIs). It uses [BubbleTea v2](https://github.com/charmbracelet/bubbletea) for interactive UI construction and [Lipgloss v2](https://github.com/charmbracelet/lipgloss) for TUI styling and layouts.
+
+## Project Goal
+The primary objective of this repository is to demonstrate how to test terminal applications under two distinct testing paradigms:
+1. **In-Process Testing**: Driving the Bubble Tea model programmatically without a real terminal.
+2. **Terminal Automation Testing**: Driving the compiled binary in an automated terminal emulator (headless PTY).
+
+## Quick Links to Test Suites
+- **Go E2E Tests ([teatest](https://pkg.go.dev/github.com/charmbracelet/x/exp/teatest/v2))**: Located in [`tests/e2e/app_test.go`](./tests/e2e/app_test.go) — programmatically sends events and asserts state in-process.
+- **Shell-Use E2E Tests (Node.js/Vitest via [Shell-Use](https://github.com/microsoft/shell-use))**: Located in the [`tests/e2e-shell-use/`](./tests/e2e-shell-use/) directory — drives the compiled terminal app inside a PTY using `@microsoft/shell-use`.
+
+---
 
 I used _Go_ version _1.26.5_ and the corresponding _golangci-lint_.
 
