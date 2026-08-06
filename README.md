@@ -2,6 +2,8 @@
 
 This project is a dedicated sandbox designed to explore and evaluate different End-to-End (E2E) testing frameworks for Terminal User Interfaces (TUIs). It uses [BubbleTea v2](https://github.com/charmbracelet/bubbletea) for interactive UI construction and [Lipgloss v2](https://github.com/charmbracelet/lipgloss) for TUI styling and layouts.
 
+![TUI E2E Demo Walkthrough](./e2e_mvp.gif)
+
 ## Project Goal
 The primary objective of this repository is to demonstrate how to test terminal applications under two distinct testing paradigms:
 1. **In-Process Testing**: Driving the Bubble Tea model programmatically without a real terminal.
