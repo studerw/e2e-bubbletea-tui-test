@@ -96,6 +96,10 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 				if len(m.input) > 0 {
 					m.input = m.input[:len(m.input)-1]
 				}
+			case "space":
+				// In BubbleTea v2, the spacebar produces msg.String() == "space"
+				// (not " "), so the default len==1 guard would drop it.
+				m.input += " "
 			default:
 				if len(msg.String()) == 1 {
 					m.input += msg.String()

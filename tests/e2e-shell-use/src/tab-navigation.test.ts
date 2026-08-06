@@ -28,13 +28,15 @@ describe('Tab Navigation', () => {
   it('switches to Todo List tab with key 3', async () => {
     await su.press('3');
     await su.waitIdle();
-    await su.expectText('Todo List');
+    // Assert on a pre-loaded todo item — unique to the Todo List panel content
+    await su.expectText('Write E2E tests for TUI app');
   });
 
   it('switches to Timer tab with key 4', async () => {
     await su.press('4');
     await su.waitIdle();
-    await su.expectText('Start');
+    // Assert on the initial timer display — unique to the Timer panel
+    await su.expectText('00:00');
   });
 
   it('switches back to Text tab with key 1', async () => {
