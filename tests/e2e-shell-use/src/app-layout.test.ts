@@ -27,7 +27,7 @@ describe('App Layout', () => {
   });
 
   it('displays tab labels', async () => {
-    await su.expectText('Text');
+    await su.expectText('Text Panel');
     await su.expectText('Web Call');
     await su.expectText('Todo List');
     await su.expectText('Timer');

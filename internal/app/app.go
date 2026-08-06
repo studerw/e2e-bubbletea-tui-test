@@ -31,7 +31,7 @@ type Model struct {
 
 // New creates a new application model.
 func New() Model {
-	tabNames := []string{"Text", "Web Call", "Todo List", "Timer"}
+	tabNames := []string{"Text Panel", "Web Call", "Todo List", "Timer"}
 
 	return Model{
 		header:     header.New("E2E MVP using BubbleTea v2"),

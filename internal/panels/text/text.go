@@ -49,7 +49,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 
 // View renders the text panel.
 func (m Model) View() string {
-	title := titleStyle.Render("📄 Text Panel - Lorem Ipsum")
+	title := titleStyle.Render("📄 Lorem Ipsum")
 	content := textStyle.Render(loremIpsum)
 
 	return panelStyle.
