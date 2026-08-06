@@ -13,11 +13,9 @@ The primary objective of this repository is to demonstrate how to test terminal 
 
 ---
 
-I used _Go_ version _1.26.5_ and the corresponding _golangci-lint_.
-
 ## Docker Quick Start
 
-> **Only Docker is required** — no Go, Node.js, golangci-lint, or other tools need to be installed locally.
+> **Only Docker is required** — none of the build and run tools need to be installed locally.
 
 ```bash
 # 1. Build the Docker dev image (one-time; re-run when Dockerfile/go.mod/package-lock.json change)
@@ -43,7 +41,7 @@ See the [Docker Commands](#docker-commands) table below for the full list of tar
 
 ### Using Docker (recommended)
 
-Install **[Docker](https://docs.docker.com/get-docker/)** — that's it. Run `make docker-build` once to create the dev image, then use `make docker-*` targets for everything else. No Go, Node.js, golangci-lint, or shell-use CLI needed.
+Install **[Docker](https://docs.docker.com/get-docker/)** — that's it. Run `make docker-build` once to create the dev image, then use `make docker-*` targets for everything else.
 
 ### Running natively (optional)
 
@@ -306,4 +304,4 @@ This is the simplest way to visually verify what the tests are asserting against
 3. **Todo List**: Interactive task manager
 4. **Timer**: Stopwatch with laps
 
-© 2026 Clarity Innovations
+

@@ -1,6 +1,6 @@
 import {describe, it, beforeAll, afterAll, TestContext} from 'vitest';
 import { ShellUse } from '@microsoft/shell-use';
-import { afterEach } from 'vitest';
+// import { afterEach } from 'vitest';
 
 describe('Todo List Panel', () => {
   let su: ShellUse;
@@ -42,8 +42,8 @@ describe('Todo List Panel', () => {
   //   }
   // });
 
-  it('adds a new todo item', async (testContext: TestContext & Object) => {
-    // await printScreen(testContext)
+  it('adds a new todo item', async (_testContext: TestContext & Object) => {
+    // await printScreen(_testContext)
     // Press 'a' to enter input mode
     await su.press('a');
     // await printScreen(testContext)
