@@ -5,13 +5,13 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
-	"github.com/yourusername/tui-e2e-demo/internal/components/footer"
-	"github.com/yourusername/tui-e2e-demo/internal/components/header"
-	"github.com/yourusername/tui-e2e-demo/internal/components/tabs"
-	"github.com/yourusername/tui-e2e-demo/internal/panels/text"
-	"github.com/yourusername/tui-e2e-demo/internal/panels/timer"
-	"github.com/yourusername/tui-e2e-demo/internal/panels/todolist"
-	"github.com/yourusername/tui-e2e-demo/internal/panels/webcall"
+	"github.com/studerw/tui-e2e-demo/internal/components/footer"
+	"github.com/studerw/tui-e2e-demo/internal/components/header"
+	"github.com/studerw/tui-e2e-demo/internal/components/tabs"
+	"github.com/studerw/tui-e2e-demo/internal/panels/text"
+	"github.com/studerw/tui-e2e-demo/internal/panels/timer"
+	"github.com/studerw/tui-e2e-demo/internal/panels/todolist"
+	"github.com/studerw/tui-e2e-demo/internal/panels/webcall"
 )
 
 // Model represents the main application state.

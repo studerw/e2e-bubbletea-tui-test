@@ -1,4 +1,4 @@
-module github.com/yourusername/tui-e2e-demo
+module github.com/studerw/tui-e2e-demo
 
 go 1.26.0
 

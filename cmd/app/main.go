@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/yourusername/tui-e2e-demo/internal/app"
+	"github.com/studerw/tui-e2e-demo/internal/app"
 )
 
 func main() {

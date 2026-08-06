@@ -12,7 +12,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	teatest "github.com/charmbracelet/x/exp/teatest/v2"
 
-	"github.com/yourusername/tui-e2e-demo/internal/app"
+	"github.com/studerw/tui-e2e-demo/internal/app"
 )
 
 // sendKey sends a key press message for a simple character key.
