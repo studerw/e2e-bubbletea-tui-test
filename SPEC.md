@@ -46,7 +46,7 @@ A **hybrid** approach is used for end-to-end testing:
     * Tab 4: Give me some options, same as step 3.
 
 ## Code Style
-* I am a begginer Go coder, so I want you use the most standard Go project and coding styles, formatting, etc. Include typical linter info and other supporting buildfiles and anything else a typical Go project would use, and tie them to the Makefile. 
+* I am a beginner Go coder, so I want you use the most standard Go project and coding styles, formatting, etc. Include typical linter info and other supporting buildfiles and anything else a typical Go project would use, and tie them to the Makefile. 
 
 ## README
 There should be a standard README.md that gives a concise summary of the project and how to use the Makefile and any other pertinent information for developers and testers. 

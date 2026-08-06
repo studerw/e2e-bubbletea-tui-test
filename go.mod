@@ -1,10 +1,11 @@
 module github.com/yourusername/tui-e2e-demo
 
-go 1.25.0
+go 1.26.0
 
 require (
 	charm.land/bubbletea/v2 v2.0.8
 	charm.land/lipgloss/v2 v2.0.5
+	github.com/charmbracelet/x/exp/teatest/v2 v2.0.0-20260803091719-3755ebad01b1
 )
 
 require (
@@ -13,7 +14,6 @@ require (
 	github.com/charmbracelet/ultraviolet v0.0.0-20260703014108-f5a850f9c2b7 // indirect
 	github.com/charmbracelet/x/ansi v0.11.7 // indirect
 	github.com/charmbracelet/x/exp/golden v0.0.0-20251109135125-8916d276318f // indirect
-	github.com/charmbracelet/x/exp/teatest/v2 v2.0.0-20260803091719-3755ebad01b1 // indirect
 	github.com/charmbracelet/x/term v0.2.2 // indirect
 	github.com/charmbracelet/x/termios v0.1.1 // indirect
 	github.com/charmbracelet/x/windows v0.2.2 // indirect

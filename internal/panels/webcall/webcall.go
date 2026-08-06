@@ -121,7 +121,7 @@ func fetchData(url string) tea.Cmd {
 		if err != nil {
 			return responseMsg{err: err}
 		}
-		defer resp.Body.Close()
+		defer func() { _ = resp.Body.Close() }()
 
 		body, err := io.ReadAll(resp.Body)
 		if err != nil {

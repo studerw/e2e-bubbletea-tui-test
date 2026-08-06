@@ -6,20 +6,63 @@ I used _Go_ version _1.26.5_ and the corresponding _golangci-lint_.
 
 ## Prerequisites
 
-- **Go** 1.22+
-- **Node.js** 20+ (for Shell-Use E2E tests)
-- **shell-use** CLI ([microsoft/shell-use](https://github.com/microsoft/shell-use)) — install via:
+- **Go** 1.26 ([install](https://go.dev/dl/))
+- **golangci-lint** (optional, for linting): `make install-tools`
+  
+For Shell-Use E2E tests only:
+- **Node.js** 20+ ([install](https://nodejs.org/))
+- **shell-use** CLI — a Rust-powered terminal automation tool from [microsoft/shell-use](https://github.com/microsoft/shell-use). The Node.js `@microsoft/shell-use` package is a client that talks to this CLI binary, so it **must** be installed separately:
+
+  **macOS (Homebrew):**
   ```bash
   brew tap microsoft/shell-use https://github.com/microsoft/shell-use
   brew install shell-use
   ```
-- **golangci-lint** (optional, for linting): `make install-tools`
+
+  **macOS / Linux (install script):**
+  ```bash
+  curl --proto '=https' --tlsv1.2 -LsSf https://raw.githubusercontent.com/microsoft/shell-use/main/install/install.sh | sh
+  ```
+
+  **Windows (PowerShell):**
+  ```powershell
+  irm https://raw.githubusercontent.com/microsoft/shell-use/main/install/install.ps1 | iex
+  ```
+
+  **Windows (winget):**
+  ```bash
+  winget install Microsoft.ShellUse
+  ```
+
+  Verify it's installed: `shell-use --version`
 
 ## Quick Start
 
 ```bash
 make deps    # Download Go dependencies
 make run     # Build and run the TUI app
+```
+
+## Local Setup (First Time)
+
+```bash
+# 1. Clone and install Go dependencies
+make deps
+
+# 2. Build and verify the app runs
+make build
+make run          # Press q to quit
+
+# 3. Run Go-level E2E tests (no extra dependencies needed)
+make e2e-go
+
+# 4. (Optional) Set up Shell-Use tests
+#    Requires: Node.js 20+ and shell-use CLI (see Prerequisites)
+make e2e-install  # Install Node.js test dependencies
+make e2e-shell    # Run Shell-Use E2E tests
+
+# 5. Run everything
+make e2e          # Runs both Go and Shell-Use E2E tests
 ```
 
 ## Testing
@@ -34,10 +77,10 @@ make e2e-go
 ```
 
 ### Shell-Use Tests (Node.js + Vitest)
-Integration tests that launch the real compiled binary in a terminal session using [Shell-Use](https://github.com/microsoft/shell-use). Tests the actual rendered TUI output with real keystrokes.
+Integration tests that launch the real compiled binary in a terminal session using [Shell-Use](https://github.com/microsoft/shell-use). Tests the actual rendered TUI output with real keystrokes. Requires the `shell-use` CLI binary and Node.js 20+.
 
 ```bash
-make e2e-install  # First time: install Node.js dependencies
+make e2e-install  # First time only: install Node.js dependencies
 make e2e-shell    # Run Shell-Use E2E tests
 ```
 

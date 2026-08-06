@@ -16,8 +16,6 @@ var (
 				Foreground(lipgloss.Color("#888888")).
 				Background(lipgloss.Color("#333333")).
 				Padding(0, 2)
-
-	tabGap = lipgloss.NewStyle().Width(1)
 )
 
 // Model represents the tabs component state.

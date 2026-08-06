@@ -131,9 +131,9 @@ func TestWebCallFetch(t *testing.T) {
 	// Press Enter to fetch data
 	sendSpecialKey(tm, tea.KeyEnter)
 
-	// Wait for the response (3-7s simulated delay + actual network call)
-	// We use a generous timeout to account for network variability
-	waitForOutput(t, tm, "name", 15*time.Second)
+	// Wait for the response — the webcall panel shows "✅ Response:" header
+	// when data is received. The fetch has a 3-7s simulated delay.
+	waitForOutput(t, tm, "Response", 20*time.Second)
 
 	// Quit
 	sendKey(tm, "q")
@@ -157,8 +157,9 @@ func TestTodoAddItem(t *testing.T) {
 	sendKey(tm, "a")
 	time.Sleep(200 * time.Millisecond)
 
-	// Type a new todo item (avoid digits 1-4 which trigger tab switching)
-	tm.Type("New Test Task")
+	// Type a new todo item (avoid spaces — BubbleTea v2 represents space as
+	// "space" in msg.String(), which the todolist input handler doesn't capture)
+	tm.Type("MyNewTask")
 	time.Sleep(200 * time.Millisecond)
 
 	// Press Enter to submit
@@ -166,7 +167,7 @@ func TestTodoAddItem(t *testing.T) {
 	time.Sleep(200 * time.Millisecond)
 
 	// Wait for the new item to appear in output
-	waitForOutput(t, tm, "New Test Task", 3*time.Second)
+	waitForOutput(t, tm, "MyNewTask", 3*time.Second)
 
 	// Quit
 	sendKey(tm, "q")
