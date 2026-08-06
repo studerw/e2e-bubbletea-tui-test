@@ -36,7 +36,7 @@ func New() Model {
 	return Model{
 		header:     header.New("E2E MVP using BubbleTea v2"),
 		tabs:       tabs.New(tabNames),
-		footer:     footer.New("© 2024 Clarity Innovations™ • All Rights Reserved"),
+		footer:     footer.New("© 2026 Clarity Innovations"),
 		textPanel:  text.New(),
 		webPanel:   webcall.New(),
 		todoPanel:  todolist.New(),

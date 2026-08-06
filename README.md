@@ -2,15 +2,47 @@
 
 A TUI application built with Go and BubbleTea v2 for end-to-end testing purposes.
 
-I used _Go_ version _1.26.5_ and the corresponding _golangci-lint_. 
+I used _Go_ version _1.26.5_ and the corresponding _golangci-lint_.
+
+## Docker Quick Start
+
+> **Only Docker is required** — no Go, Node.js, golangci-lint, or other tools need to be installed locally.
+
+```bash
+# 1. Build the Docker dev image (one-time; re-run when Dockerfile/go.mod/package-lock.json change)
+make build-docker-image
+
+# 2. Compile the app binary inside Docker (writes to bin/ — same as 'make build' locally)
+make docker-build
+
+# 3. Run the TUI interactively
+make docker-run
+
+# 4. Run all tests (unit + E2E) — fully headless, no TTY needed
+make docker-test
+make docker-e2e
+
+# 5. Debug: open a shell inside the container
+make docker-shell
+```
+
+See the [Docker Commands](#docker-commands) table below for the full list of targets.
 
 ## Prerequisites
+
+### Using Docker (recommended)
+
+Install **[Docker](https://docs.docker.com/get-docker/)** — that's it. Run `make docker-build` once to create the dev image, then use `make docker-*` targets for everything else. No Go, Node.js, golangci-lint, or shell-use CLI needed.
+
+### Running natively (optional)
+
+If you prefer to run without Docker:
 
 - **Go** 1.26 ([install](https://go.dev/dl/))
 - **golangci-lint** (optional, for linting): `make install-tools`
   
 For Shell-Use E2E tests only:
-- **Node.js** 20+ ([install](https://nodejs.org/))
+- **Node.js** 22+ ([install](https://nodejs.org/))
 - **shell-use** CLI — a Rust-powered terminal automation tool from [microsoft/shell-use](https://github.com/microsoft/shell-use). The Node.js `@microsoft/shell-use` package is a client that talks to this CLI binary, so it **must** be installed separately:
 
   **macOS (Homebrew):**
@@ -106,6 +138,77 @@ make e2e          # Runs both Go and Shell-Use E2E tests
 | `make deps` | Download dependencies |
 | `make help` | Show all commands |
 
+### Docker Commands
+
+Only Docker is required for these targets — no Go, Node, or other tools needed.
+
+| Command | Description |
+|---------|-------------|
+| `make build-docker-image` | Build the dev image (`tui-e2e-demo:dev`) — one-time setup |
+| `make docker-build` | Compile the app binary inside Docker → writes to `bin/` (like `make build` locally). Note that on e.g. Mac, the compiled binary wouldn't be runnable on your native machine - only in the image itself. |
+| `make docker-run` | Run the TUI interactively inside Docker (**requires a TTY; local use only**) |
+| `make docker-test` | Run unit tests inside Docker (headless / CI-compatible) |
+| `make docker-lint` | Run golangci-lint inside Docker (headless / CI-compatible) |
+| `make docker-e2e` | Run all E2E tests inside Docker (headless / CI-compatible) |
+| `make docker-e2e-go` | Run Go/teatest E2E tests inside Docker |
+| `make docker-e2e-shell` | Run Shell-Use/Vitest E2E tests inside Docker |
+| `make docker-shell` | Open a bash shell inside the container for debugging |
+
+> **`DOCKER_IMAGE` override**: set the variable to push/pull from a registry:
+> ```bash
+> make build-docker-image DOCKER_IMAGE=registry.example.com/myteam/tui-e2e-demo:latest
+> ```
+
+## Running in CI (GitLab CI / GitHub Actions)
+
+All `docker-e2e*` and `docker-test` / `docker-lint` targets are **fully headless** — they do not require an allocated TTY, so they work unmodified in any Docker-capable CI runner.
+
+### Why headless works
+
+| Test suite | How it avoids needing a host TTY |
+|---|---|
+| Go unit tests | Pure in-process, no terminal needed |
+| Go E2E (`teatest`) | `teatest` creates an **in-process** pseudo-terminal and drives BubbleTea programmatically; no host TTY is allocated |
+| Shell-Use / Vitest | `shell-use` spawns its own PTY via `/dev/pts`, which is mounted inside every Docker container by default; the test process itself runs headlessly |
+
+### Example: GitLab CI (`.gitlab-ci.yml`)
+
+```yaml
+stages:
+  - build
+  - test
+
+variables:
+  DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+
+build-image:
+  stage: build
+  image: docker:26
+  services:
+    - docker:26-dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - make build-docker-image DOCKER_IMAGE=$DOCKER_IMAGE
+    - docker push $DOCKER_IMAGE
+
+unit-tests:
+  stage: test
+  image: $DOCKER_IMAGE
+  script:
+    - make test    # runs natively inside the already-correct image
+
+e2e-tests:
+  stage: test
+  image: docker:26
+  services:
+    - docker:26-dind
+  script:
+    - docker pull $DOCKER_IMAGE
+    - make docker-e2e DOCKER_IMAGE=$DOCKER_IMAGE
+```
+
+> **Simpler alternative**: if the CI runner itself uses your dev image, just call `make test`, `make e2e-go`, and `make e2e-shell` directly — no extra Docker-in-Docker setup needed.
+
 ## Shell-Use Debugging
 
 Shell-Use runs in a **headless PTY** — there's no visible terminal window during tests. Here's how to observe what's happening:
@@ -192,4 +295,4 @@ This is the simplest way to visually verify what the tests are asserting against
 3. **Todo List**: Interactive task manager
 4. **Timer**: Stopwatch with laps
 
-© 2024 Clarity Innovations
+© 2026 Clarity Innovations

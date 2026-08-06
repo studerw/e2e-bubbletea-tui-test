@@ -1,0 +1,20 @@
+# Build artifacts
+bin/
+
+# Node dependencies (baked into Docker image, not needed in build context)
+tests/e2e-shell-use/node_modules/
+
+# Version control
+.git/
+
+# IDE / editor metadata
+.idea/
+.vscode/
+
+# Test coverage output
+coverage.out
+coverage.html
+
+# OS artifacts
+.DS_Store
+Thumbs.db
